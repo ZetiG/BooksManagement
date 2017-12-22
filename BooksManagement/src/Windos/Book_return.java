@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
@@ -21,6 +22,7 @@ import javax.swing.ImageIcon;
 
 public class Book_return extends JFrame{
 	private JTextField textField;
+	private ResultSet r;
 
 	public Book_return() {
 		setTitle("图书归还");
@@ -68,16 +70,31 @@ public class Book_return extends JFrame{
 	           LocalDate ld=LocalDate.now();
 	         try {	        
 	           conn = Login.getCon();  //建立数据库连接
-	           String sqlupdate=null;        
-	           sqlupdate = "update  lend  set rtn='"+ld+"'"
+	           String sqlupdate2=null;  
+	           
+	           String sqlupdate1 = "select Ld  from lend  "
+		           		+ " where ISBN ="+textField.getText()
+		           		+"  and rtn is null";
+	           PreparedStatement stmt = conn.prepareStatement(sqlupdate1);
+	           r= stmt.executeQuery();
+	           r.next();
+	           String LD=r.getString(1); 
+	           String today=ld.toString();
+	           int diff1=LocalDate.parse(today).getDayOfYear();
+	           int diff2=LocalDate.parse(LD).getDayOfYear();
+	           int OVERTIME=diff1-diff2;
+	           if(OVERTIME>=30) {JOptionPane.showMessageDialog(null,"你已超期，请及时缴清罚金"); }  
+	           sqlupdate2 = "update  lend  set rtn='"+ld+"'"
 	           		+ " where ISBN ="+textField.getText()
 	           		+"  and rtn is null";
-	          PreparedStatement stmt = conn.prepareStatement(sqlupdate);   //会抛出异常   
+	          stmt = conn.prepareStatement(sqlupdate2);   //会抛出异常   
 	          int i = stmt.executeUpdate();           
 	          if (i==1) {
 	              result = true;
 	          
-	          }} catch (SQLException e) {
+	          }}
+	          
+	           catch (SQLException e) {
 	              // TODO Auto-generated catch block
 	              e.printStackTrace();
 	           } finally { //finally的用处是不管程序是否出现异常，都要执行finally语句，所以在此处关闭连接

@@ -106,6 +106,9 @@ public class Book_borrow extends JFrame {
 			if(b_borrow2()){
 				JOptionPane.showMessageDialog(null,"借书成功啦！！"); 
 			}
+			else {
+				JOptionPane.showMessageDialog(null,"没有此书或者已经被借走啦！");
+			}
 	} 
 	 });		
 		
