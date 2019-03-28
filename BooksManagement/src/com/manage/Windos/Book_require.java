@@ -1,4 +1,4 @@
-package Windos;
+package com.manage.Windos;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
