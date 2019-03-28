@@ -1,5 +1,7 @@
 package com.manage.Windos;
 
+import com.manage.Mapper.OperationSQL;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -62,7 +64,7 @@ public class Book_return extends JFrame {
         Connection conn = null;
         LocalDate ld = LocalDate.now();
         try {
-            conn = Login.getCon();  //建立数据库连接
+            conn = OperationSQL.getCon();  //建立数据库连接
             String sqlupdate2 = null;
 
             String sqlupdate1 = "select Ld  from lend  "

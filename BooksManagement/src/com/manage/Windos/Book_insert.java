@@ -1,5 +1,7 @@
 package com.manage.Windos;
 
+import com.manage.Mapper.OperationSQL;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -142,7 +144,7 @@ public class Book_insert extends JFrame {
         boolean result = false;
         Connection conn = null;
         try {
-            conn = Login.getCon();  //建立数据库连接
+            conn = OperationSQL.getCon();  //建立数据库连接
             String sqlInset = "insert into Book(ISBN,Bname,Bprice,Bcomment,Bpublish,Bauthor,Bsort)"
                     + "values('" + textArea_3.getText() + "','" + textArea.getText() + "','" + textArea_2.getText() + "','" + textArea_5.getText() + "','" + textArea_4.getText() + "','" + textArea_1.getText() + "','" + textArea_6.getText() + "')";
             PreparedStatement stmt = conn.prepareStatement(sqlInset);   //会抛出异常

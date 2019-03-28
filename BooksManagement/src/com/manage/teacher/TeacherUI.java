@@ -1,5 +1,6 @@
 package com.manage.teacher;
 
+import com.manage.Mapper.OperationSQL;
 import com.manage.Windos.Login;
 
 import javax.swing.*;
@@ -92,17 +93,17 @@ public class TeacherUI extends JFrame {
         textArea_4.setBounds(100, 197, 105, 24);
         getContentPane().add(textArea_4);
 
-        JLabel label_4 = new JLabel("\u5185\u5BB9\u7B80\u4ECB\uFF0850\u5B57\u5185\uFF09\uFF1A");
+        JLabel label_4 = new JLabel("个人简介");
         label_4.setFont(new Font("微软雅黑", Font.PLAIN, 12));
         label_4.setHorizontalAlignment(SwingConstants.CENTER);
         label_4.setBounds(224, 78, 146, 15);
         getContentPane().add(label_4);
 
-        JButton button = new JButton("\u63D0\u4EA4");
+        JButton button = new JButton("提交");
         button.setBounds(231, 197, 84, 23);
         getContentPane().add(button);
 
-        JButton btnNewButton = new JButton("\u8FD4\u56DE");
+        JButton btnNewButton = new JButton("返回");
         btnNewButton.setBounds(332, 197, 77, 23);
         getContentPane().add(btnNewButton);
 
@@ -111,7 +112,7 @@ public class TeacherUI extends JFrame {
         textArea_5.setBounds(227, 105, 161, 73);
         getContentPane().add(textArea_5);
 
-        JLabel label_5 = new JLabel("   \u7C7B\u522B\uFF1A");
+        JLabel label_5 = new JLabel("类别");
         label_5.setHorizontalAlignment(SwingConstants.LEFT);
         label_5.setFont(new Font("微软雅黑", Font.PLAIN, 12));
         label_5.setBounds(224, 36, 96, 15);
@@ -122,21 +123,17 @@ public class TeacherUI extends JFrame {
         textArea_6.setBounds(286, 32, 102, 24);
         getContentPane().add(textArea_6);
 
-        btnNewButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-                setVisible(false);
-            }
+        btnNewButton.addActionListener(e -> {
+            // TODO Auto-generated method stub
+            setVisible(false);
         });
 
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-                if (b_insert()) {
-                    JOptionPane.showMessageDialog(null, "添加成功啦！！");
-                } else {
-                    JOptionPane.showMessageDialog(null, "请输入已有作者或分类！！");
-                }
+        button.addActionListener(e -> {
+            // TODO Auto-generated method stub
+            if (b_insert()) {
+                JOptionPane.showMessageDialog(null, "添加成功！");
+            } else {
+                JOptionPane.showMessageDialog(null, "请输入已有作者或分类！！");
             }
         });
 
@@ -146,7 +143,7 @@ public class TeacherUI extends JFrame {
         boolean result = false;
         Connection conn = null;
         try {
-            conn = Login.getCon();  //建立数据库连接
+            conn = OperationSQL.getCon();  //建立数据库连接
             String sqlInset = "insert into Book(ISBN,Bname,Bprice,Bcomment,Bpublish,Bauthor,Bsort)"
                     + "values('" + textArea_3.getText() + "','" + textArea.getText() + "','" + textArea_2.getText() + "','" + textArea_5.getText() + "','" + textArea_4.getText() + "','" + textArea_1.getText() + "','" + textArea_6.getText() + "')";
             PreparedStatement stmt = conn.prepareStatement(sqlInset);   //会抛出异常

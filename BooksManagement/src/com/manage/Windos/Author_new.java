@@ -1,5 +1,7 @@
 package com.manage.Windos;
 
+import com.manage.Mapper.OperationSQL;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -89,7 +91,7 @@ public class Author_new extends JFrame {
         boolean result = false;
         Connection conn = null;
         try {
-            conn = Login.getCon();  //建立数据库连接
+            conn = OperationSQL.getCon();  //建立数据库连接
             if (!textArea_2.getText().equals("") && !textArea_2.getText().equals("关于作者，50字以内。")) {
                 String sqlInset = "insert into Author(Bauthor,sex,about,age)  "
                         + "values('" + textArea.getText() + "','" + textArea_3.getText() + "','" + textArea_2.getText() + "','" + textArea_1.getText() + "')";

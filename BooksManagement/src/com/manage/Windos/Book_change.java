@@ -1,5 +1,7 @@
 package com.manage.Windos;
 
+import com.manage.Mapper.OperationSQL;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -145,7 +147,7 @@ public class Book_change extends JFrame {
         boolean result = false;
         Connection conn = null;
         try {
-            conn = Login.getCon();  //建立数据库连接
+            conn = OperationSQL.getCon();  //建立数据库连接
             int flag = 0;
             String sqlupdate = "UPDATE book SET ";
             String where = " WHERE ISBN=" + textField.getText();

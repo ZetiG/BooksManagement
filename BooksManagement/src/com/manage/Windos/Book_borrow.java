@@ -1,5 +1,7 @@
 package com.manage.Windos;
 
+import com.manage.Mapper.OperationSQL;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -108,7 +110,7 @@ public class Book_borrow extends JFrame {
         boolean result = false;
         Connection conn = null;
         try {
-            conn = Login.getCon();  //建立数据库连接
+            conn = OperationSQL.getCon();  //建立数据库连接
             String sqlrequire;
             sqlrequire = "select *" +
                     "from require_book_now " +
@@ -143,7 +145,7 @@ public class Book_borrow extends JFrame {
         LocalDate ld = LocalDate.now();
         Connection conn = null;
         try {
-            conn = Login.getCon();
+            conn = OperationSQL.getCon();
             String sqlInset = "insert into Lend(ID,ISBN,Ld)"
                     + "values('" + textField_1.getText() + "','" + textField.getText() + "','" + ld + "')";
             PreparedStatement stmt = conn.prepareStatement(sqlInset);
