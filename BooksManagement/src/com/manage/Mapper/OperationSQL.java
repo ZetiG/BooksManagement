@@ -22,7 +22,7 @@ public class OperationSQL {
         return conn;
     }
 
-    public static boolean queryUser(String account, String pwd, String role) {
+    public static int queryUser(String account, String pwd, String role) {
         try {
             //创建SQL语句
             String sql = "select id,account,pwd,role from t_user where account=? and role=? and flag='0'";
@@ -38,7 +38,8 @@ public class OperationSQL {
                 //判断密码是否正确
                 String passWord = result.getString(3);
                 if (passWord.equals(pwd)) {
-                    return true;
+                    int id = result.getInt(1);
+                    return id;
                 }
                 JOptionPane.showMessageDialog(null, "密码错误，请重试！", "提示消息", JOptionPane.WARNING_MESSAGE);
             } else {
@@ -51,13 +52,13 @@ public class OperationSQL {
             //关闭连接
             closeConnet();
         }
-        return false;
+        return 0;
     }
 
     /**
      * 公共调用，关闭连接
      */
-    private static void closeConnet() {
+    public static void closeConnet() {
         //关闭连接
         try {
             result.close();

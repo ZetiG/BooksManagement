@@ -1,6 +1,7 @@
 package com.manage.Windos;
 
 import com.manage.Mapper.OperationSQL;
+import com.manage.teacher.TeacherUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +19,7 @@ public class Login extends JFrame {
     private static String user;
     private static String psw;
     private String role;
+    public static int userId;
 
     JRadioButton check1, check2;
     ButtonGroup bg;
@@ -86,12 +88,13 @@ public class Login extends JFrame {
                     } else if (check2.isSelected()) {
                         role = "2";
                     }
-                    boolean login = OperationSQL.queryUser(user, psw, role);
-                    if (login) {
+                    userId = OperationSQL.queryUser(user, psw, role);
+                    if (userId > 0) {
                         //关闭当前界面
                         dispose();
                         new MainJF();
                     } else {
+                        JOptionPane.showMessageDialog(null, "用户信息获取失败,请联系管理员");
                         clear();
                     }
                 } catch (Exception e1) {
@@ -109,7 +112,6 @@ public class Login extends JFrame {
         //设置当关闭窗口时，保证JVM也退出
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-
 
 
     /**

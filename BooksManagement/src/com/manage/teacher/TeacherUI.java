@@ -5,21 +5,23 @@ import com.manage.Windos.Login;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TeacherUI extends JFrame {
 
-    private JTextArea textArea;
-    private JTextArea textArea_1;
-    private JTextArea textArea_2;
-    private JTextArea textArea_3;
-    private JTextArea textArea_4;
-    private JTextArea textArea_5;
-    private JTextArea textArea_6;
+    private static JTextArea name = new JTextArea();
+    private static JTextArea sex = new JTextArea();
+    private static JTextArea age = new JTextArea();
+    private static JTextArea proxyClass = new JTextArea();
+    private static JTextArea phone = new JTextArea();
+    private static JTextArea textArea_5 = new JTextArea();
+    private static JTextArea mottos = new JTextArea();
+
+    private Connection Connec;
+    private static ResultSet result;
 
     public static void main(String[] args) {
         new TeacherUI();
@@ -30,6 +32,9 @@ public class TeacherUI extends JFrame {
      */
     public TeacherUI() {
         super("教师个人信息");
+        //查询数据库教师表，将信息展示在页面
+        selectTeacher();
+
         setVisible(true);
         setBounds(100, 100, 450, 300);
         setLocation(330, 400);
@@ -43,10 +48,9 @@ public class TeacherUI extends JFrame {
         lblIsbn.setBounds(10, 36, 96, 15);
         getContentPane().add(lblIsbn);
 
-        textArea_3 = new JTextArea();
-        textArea_3.setColumns(10);
-        textArea_3.setBounds(100, 32, 105, 24);
-        getContentPane().add(textArea_3);
+        name.setColumns(10);
+        name.setBounds(100, 32, 105, 24);
+        getContentPane().add(name);
 
         JLabel label = new JLabel("性别:");
         label.setFont(new Font("微软雅黑", Font.PLAIN, 12));
@@ -54,10 +58,9 @@ public class TeacherUI extends JFrame {
         label.setBounds(25, 78, 71, 15);
         getContentPane().add(label);
 
-        textArea = new JTextArea();
-        textArea.setColumns(10);
-        textArea.setBounds(100, 74, 105, 24);
-        getContentPane().add(textArea);
+        sex.setColumns(10);
+        sex.setBounds(100, 74, 105, 24);
+        getContentPane().add(sex);
 
         JLabel label_1 = new JLabel("年龄:");
         label_1.setFont(new Font("微软雅黑", Font.PLAIN, 12));
@@ -65,10 +68,9 @@ public class TeacherUI extends JFrame {
         label_1.setBounds(25, 122, 71, 15);
         getContentPane().add(label_1);
 
-        textArea_1 = new JTextArea();
-        textArea_1.setColumns(10);
-        textArea_1.setBounds(100, 118, 105, 24);
-        getContentPane().add(textArea_1);
+        age.setColumns(10);
+        age.setBounds(100, 118, 105, 24);
+        getContentPane().add(age);
 
         JLabel label_2 = new JLabel("代理班级:");
         label_2.setFont(new Font("微软雅黑", Font.PLAIN, 12));
@@ -76,10 +78,9 @@ public class TeacherUI extends JFrame {
         label_2.setBounds(25, 163, 71, 15);
         getContentPane().add(label_2);
 
-        textArea_2 = new JTextArea();
-        textArea_2.setColumns(10);
-        textArea_2.setBounds(100, 159, 105, 24);
-        getContentPane().add(textArea_2);
+        proxyClass.setColumns(10);
+        proxyClass.setBounds(100, 159, 105, 24);
+        getContentPane().add(proxyClass);
 
 
         JLabel label_3 = new JLabel("联系方式:");
@@ -88,18 +89,17 @@ public class TeacherUI extends JFrame {
         label_3.setBounds(30, 201, 59, 15);
         getContentPane().add(label_3);
 
-        textArea_4 = new JTextArea();
-        textArea_4.setColumns(10);
-        textArea_4.setBounds(100, 197, 105, 24);
-        getContentPane().add(textArea_4);
+        phone.setColumns(10);
+        phone.setBounds(100, 197, 105, 24);
+        getContentPane().add(phone);
 
-        JLabel label_4 = new JLabel("个人简介");
+        JLabel label_4 = new JLabel("座右铭");
         label_4.setFont(new Font("微软雅黑", Font.PLAIN, 12));
         label_4.setHorizontalAlignment(SwingConstants.CENTER);
         label_4.setBounds(224, 78, 146, 15);
         getContentPane().add(label_4);
 
-        JButton button = new JButton("提交");
+        JButton button = new JButton("修改");
         button.setBounds(231, 197, 84, 23);
         getContentPane().add(button);
 
@@ -118,10 +118,10 @@ public class TeacherUI extends JFrame {
         label_5.setBounds(224, 36, 96, 15);
         getContentPane().add(label_5);
 
-        textArea_6 = new JTextArea();
-        textArea_6.setColumns(10);
-        textArea_6.setBounds(286, 32, 102, 24);
-        getContentPane().add(textArea_6);
+        mottos = new JTextArea();
+        mottos.setColumns(10);
+        mottos.setBounds(286, 32, 102, 24);
+        getContentPane().add(mottos);
 
         btnNewButton.addActionListener(e -> {
             // TODO Auto-generated method stub
@@ -130,40 +130,60 @@ public class TeacherUI extends JFrame {
 
         button.addActionListener(e -> {
             // TODO Auto-generated method stub
-            if (b_insert()) {
-                JOptionPane.showMessageDialog(null, "添加成功！");
+            if (updateUserInfo()) {
+                JOptionPane.showMessageDialog(null, "信息修改成功！");
             } else {
-                JOptionPane.showMessageDialog(null, "请输入已有作者或分类！！");
+                JOptionPane.showMessageDialog(null, "修改失败,请重试！");
             }
         });
 
+        //关闭连接
+        OperationSQL.closeConnet();
     }
 
-    public Boolean b_insert() {
-        boolean result = false;
-        Connection conn = null;
+    private void selectTeacher() {
         try {
-            conn = OperationSQL.getCon();  //建立数据库连接
-            String sqlInset = "insert into Book(ISBN,Bname,Bprice,Bcomment,Bpublish,Bauthor,Bsort)"
-                    + "values('" + textArea_3.getText() + "','" + textArea.getText() + "','" + textArea_2.getText() + "','" + textArea_5.getText() + "','" + textArea_4.getText() + "','" + textArea_1.getText() + "','" + textArea_6.getText() + "')";
-            PreparedStatement stmt = conn.prepareStatement(sqlInset);   //会抛出异常
+            Connec = OperationSQL.getCon();
+            String sql = "select name,sex,age,class,phone from t_teacher where user_id = ?";
+            PreparedStatement pstm = Connec.prepareStatement(sql);
+            pstm.setString(1, String.valueOf(Login.userId));
+            result = pstm.executeQuery();
+            if (result.next()) {
+                name.setText(result.getString(1));
+                sex.setText(result.getString(2));
+                age.setText(result.getString(3));
+                proxyClass.setText(result.getString(4));
+                phone.setText(result.getString(5));
 
-            int i = stmt.executeUpdate();
-            if (i == 1) {
-                result = true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-
-
-        } finally { //finally的用处是不管程序是否出现异常，都要执行finally语句，所以在此处关闭连接
-            try {
-                conn.close(); //打开一个Connection连接后，最后一定要调用它的close（）方法关闭连接，以释放系统资源及数据库资源
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        } finally {
+            OperationSQL.closeConnet();
         }
-
-        return result;
     }
+
+    private boolean updateUserInfo() {
+        try {
+            Connec = OperationSQL.getCon();
+            String sql = "update t_teacher set name=?,sex=?,age=?,class=?,phone=? where user_id = ?";
+            PreparedStatement pstm = Connec.prepareStatement(sql);
+            pstm.setString(1, name.getText());
+            pstm.setString(2, sex.getText());
+            pstm.setString(3, age.getText());
+            pstm.setString(4, proxyClass.getText());
+            pstm.setString(5, phone.getText());
+            pstm.setString(6, String.valueOf(Login.userId));
+            int update = pstm.executeUpdate();
+            if (update > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            OperationSQL.closeConnet();
+        }
+        return false;
+    }
+
 }
