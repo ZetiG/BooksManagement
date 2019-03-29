@@ -93,7 +93,7 @@ public class TeacherUI extends JFrame {
         phone.setBounds(100, 197, 105, 24);
         getContentPane().add(phone);
 
-        JLabel label_4 = new JLabel("×ùÓÒÃú");
+        JLabel label_4 = new JLabel("±¸×¢ÐÅÏ¢:");
         label_4.setFont(new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 12));
         label_4.setHorizontalAlignment(SwingConstants.CENTER);
         label_4.setBounds(224, 78, 146, 15);
