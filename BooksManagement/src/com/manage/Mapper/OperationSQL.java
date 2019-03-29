@@ -68,4 +68,30 @@ public class OperationSQL {
             e.printStackTrace();
         }
     }
+
+
+    /**
+     * 提取公共方法
+     *
+     * @param t1
+     * @param t2
+     * @param t3
+     * @param t4
+     * @param t5
+     * @param t6
+     * @param t7
+     * @param t8
+     * @throws SQLException
+     */
+    public static void setParams(JTextField t1, JTextField t2, JTextField t3, JTextField t4,
+                                 JTextField t5, JTextField t6, JTextArea t7, JTextField t8) throws SQLException {
+        t1.setText(result.getString(1));
+        t2.setText(result.getString(2));
+        t3.setText(result.getString(3));
+        t4.setText(result.getString(4));
+        t5.setText(result.getString(5));
+        t6.setText(result.getString(6));
+        t7.setText(result.getString(7));
+        t8.setText(result.getString(8));
+    }
 }

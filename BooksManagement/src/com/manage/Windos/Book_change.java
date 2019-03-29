@@ -30,19 +30,19 @@ public class Book_change extends JFrame {
      * Initialize the contents of the  .
      */
     public Book_change() {
-        setTitle("图书修改");
+        setTitle("查询学生信息");
         setVisible(true);
         setBounds(100, 100, 500, 411);
         setLocation(285, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(null);
 
-        JLabel lblNewLabel_2 = new JLabel("\u56FE\u4E66\u4FEE\u6539(\u786E\u8BA4\u4E66\u53F7)\uFF1A");
+        JLabel lblNewLabel_2 = new JLabel("学生信息查询:");
         lblNewLabel_2.setFont(new Font("微软雅黑", Font.BOLD, 16));
         lblNewLabel_2.setBounds(23, 10, 156, 29);
         getContentPane().add(lblNewLabel_2);
 
-        JLabel lblNewLabel = new JLabel("ISBN(\u4E66\u53F7\uFF1A)");
+        JLabel lblNewLabel = new JLabel("请输入学生姓名或学号:");
         lblNewLabel.setFont(new Font("黑体", Font.PLAIN, 12));
         lblNewLabel.setBounds(23, 59, 111, 19);
         getContentPane().add(lblNewLabel);
@@ -52,7 +52,7 @@ public class Book_change extends JFrame {
         getContentPane().add(textField);
         textField.setColumns(10);
 
-        JLabel label = new JLabel("\u8BF7\u8F93\u5165\u8981\u4FEE\u6539\u9879\uFF08\u4E0D\u6539\u52A8\u7684\u7559\u767D\uFF09");
+        JLabel label = new JLabel("查询结果(如查询不到请联系管理员)");
         label.setFont(new Font("微软雅黑", Font.PLAIN, 14));
         label.setBounds(23, 95, 240, 29);
         getContentPane().add(label);
@@ -63,7 +63,7 @@ public class Book_change extends JFrame {
         getContentPane().add(panel);
         panel.setLayout(null);
 
-        JLabel label_1 = new JLabel("\u56FE\u4E66\u540D\uFF1A");
+        JLabel label_1 = new JLabel("姓名");
         label_1.setBounds(22, 24, 63, 19);
         label_1.setFont(new Font("微软雅黑", Font.PLAIN, 12));
         panel.add(label_1);
@@ -129,15 +129,12 @@ public class Book_change extends JFrame {
         button.setBounds(345, 58, 93, 23);
         getContentPane().add(button);
 
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-
-                if (b_change()) {
-                    JOptionPane.showMessageDialog(null, "更改成功啦！！");
-                } else {
-                    JOptionPane.showMessageDialog(null, "请更改为已有作者或分类！！");
-                }
+        button.addActionListener(e -> {
+            // TODO Auto-generated method stub
+            if (b_change()) {
+                JOptionPane.showMessageDialog(null, "更改成功啦！！");
+            } else {
+                JOptionPane.showMessageDialog(null, "请更改为已有作者或分类！！");
             }
         });
     }

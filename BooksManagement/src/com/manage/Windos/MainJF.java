@@ -1,12 +1,10 @@
 package com.manage.Windos;
 
 import com.manage.teacher.TeacherUI;
+import com.manage.teacher.SearchStuUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
 public class MainJF extends JFrame {
     public static void main(String[] args) {
@@ -36,7 +34,7 @@ public class MainJF extends JFrame {
         panel.setLayout(gbl_panel);
 
         //左边菜单
-        JLabel lblNewLabel_1 = new JLabel("图书维护");
+        JLabel lblNewLabel_1 = new JLabel("信息维护");
         lblNewLabel_1.setFont(new Font("楷体", Font.BOLD, 15));
         lblNewLabel_1.setIcon(new ImageIcon(MainJF.class.getResource("/images/bookmaintain.png")));
         lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -53,7 +51,7 @@ public class MainJF extends JFrame {
         gbc_btnNewButton.gridy = 2;
         panel.add(btnNewButton, gbc_btnNewButton);
 
-        JButton btnNewButton_1 = new JButton("图书修改");
+        JButton btnNewButton_1 = new JButton("查询学生");
         GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
         gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 0);
         gbc_btnNewButton_1.gridx = 0;
@@ -138,7 +136,7 @@ public class MainJF extends JFrame {
 
         //Lambda表达式,点击跳转对应页面
         btnNewButton.addActionListener(e -> new TeacherUI());
-        btnNewButton_1.addActionListener(e -> new Book_change());
+        btnNewButton_1.addActionListener(e -> new SearchStuUI());
         btnNewButton_2.addActionListener(e -> new Book_delete());
         btnNewButton_3.addActionListener(e -> new Book_borrow());
         btnNewButton_4.addActionListener(e -> new Book_return());
@@ -149,7 +147,7 @@ public class MainJF extends JFrame {
 
         setVisible(true);
         setBounds(100, 100, 450, 300);
-        setLocation(800, 400);
+        setLocation(600, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 }

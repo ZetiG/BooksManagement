@@ -12,13 +12,13 @@ import java.sql.SQLException;
 
 public class TeacherUI extends JFrame {
 
-    private static JTextArea name = new JTextArea();
-    private static JTextArea sex = new JTextArea();
-    private static JTextArea age = new JTextArea();
-    private static JTextArea proxyClass = new JTextArea();
-    private static JTextArea phone = new JTextArea();
-    private static JTextArea textArea_5 = new JTextArea();
-    private static JTextArea mottos = new JTextArea();
+    private static JTextField name = new JTextField();
+    private static JTextField sex = new JTextField();
+    private static JTextField age = new JTextField();
+    private static JTextField proxyClass = new JTextField();
+    private static JTextField phone = new JTextField();
+    private static JTextField staffNo = new JTextField();
+    private static JTextArea motto = new JTextArea();
 
     private Connection Connec;
     private static ResultSet result;
@@ -107,10 +107,9 @@ public class TeacherUI extends JFrame {
         btnNewButton.setBounds(332, 197, 77, 23);
         getContentPane().add(btnNewButton);
 
-        textArea_5 = new JTextArea();
-        textArea_5.setRows(8);
-        textArea_5.setBounds(227, 105, 161, 73);
-        getContentPane().add(textArea_5);
+        motto.setRows(8);
+        motto.setBounds(227, 105, 161, 73);
+        getContentPane().add(motto);
 
         JLabel label_5 = new JLabel("类别");
         label_5.setHorizontalAlignment(SwingConstants.LEFT);
@@ -118,16 +117,18 @@ public class TeacherUI extends JFrame {
         label_5.setBounds(224, 36, 96, 15);
         getContentPane().add(label_5);
 
-        mottos = new JTextArea();
-        mottos.setColumns(10);
-        mottos.setBounds(286, 32, 102, 24);
-        getContentPane().add(mottos);
+        staffNo.setEditable(false);
+        staffNo.setColumns(10);
+        staffNo.setBounds(286, 32, 102, 24);
+        getContentPane().add(staffNo);
 
+        //监听返回按钮
         btnNewButton.addActionListener(e -> {
             // TODO Auto-generated method stub
             setVisible(false);
         });
 
+        //监听修改按钮
         button.addActionListener(e -> {
             // TODO Auto-generated method stub
             if (updateUserInfo()) {
@@ -141,20 +142,24 @@ public class TeacherUI extends JFrame {
         OperationSQL.closeConnet();
     }
 
+    /**
+     * 查询个人信息
+     */
     private void selectTeacher() {
         try {
             Connec = OperationSQL.getCon();
-            String sql = "select name,sex,age,class,phone from t_teacher where user_id = ?";
+            String sql = "select staff_no,name,sex,age,class,phone,motto from t_teacher where is_deleted=0 and user_id = ?";
             PreparedStatement pstm = Connec.prepareStatement(sql);
             pstm.setString(1, String.valueOf(Login.userId));
             result = pstm.executeQuery();
             if (result.next()) {
-                name.setText(result.getString(1));
-                sex.setText(result.getString(2));
-                age.setText(result.getString(3));
-                proxyClass.setText(result.getString(4));
-                phone.setText(result.getString(5));
-
+                staffNo.setText(result.getString(1));
+                name.setText(result.getString(2));
+                sex.setText(result.getString(3));
+                age.setText(result.getString(4));
+                proxyClass.setText(result.getString(5));
+                phone.setText(result.getString(6));
+                motto.setText(result.getString(7));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -163,17 +168,23 @@ public class TeacherUI extends JFrame {
         }
     }
 
+    /**
+     * 修改个人信息
+     *
+     * @return
+     */
     private boolean updateUserInfo() {
         try {
             Connec = OperationSQL.getCon();
-            String sql = "update t_teacher set name=?,sex=?,age=?,class=?,phone=? where user_id = ?";
+            String sql = "update t_teacher set name=?,sex=?,age=?,class=?,phone=?,motto=? where user_id = ?";
             PreparedStatement pstm = Connec.prepareStatement(sql);
             pstm.setString(1, name.getText());
             pstm.setString(2, sex.getText());
             pstm.setString(3, age.getText());
             pstm.setString(4, proxyClass.getText());
             pstm.setString(5, phone.getText());
-            pstm.setString(6, String.valueOf(Login.userId));
+            pstm.setString(6, motto.getText());
+            pstm.setString(7, String.valueOf(Login.userId));
             int update = pstm.executeUpdate();
             if (update > 0) {
                 return true;

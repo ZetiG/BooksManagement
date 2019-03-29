@@ -94,7 +94,7 @@ public class Login extends JFrame {
                         dispose();
                         new MainJF();
                     } else {
-                        JOptionPane.showMessageDialog(null, "用户信息获取失败,请联系管理员");
+//                        JOptionPane.showMessageDialog(null, "用户信息获取失败,请联系管理员");
                         clear();
                     }
                 } catch (Exception e1) {
