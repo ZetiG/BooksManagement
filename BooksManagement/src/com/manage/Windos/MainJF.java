@@ -105,7 +105,7 @@ public class MainJF extends JFrame {
         gbc_btnNewButton_4.gridy = 3;
         panel_1.add(btnNewButton_4, gbc_btnNewButton_4);
 
-        JButton btnNewButton_5 = new JButton("图书查询");
+        JButton btnNewButton_5 = new JButton("我的学生");
         GridBagConstraints gbc_btnNewButton_5 = new GridBagConstraints();
         gbc_btnNewButton_5.gridx = 0;
         gbc_btnNewButton_5.gridy = 4;

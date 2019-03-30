@@ -6,6 +6,7 @@ import com.manage.entity.Student;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.sql.Connection;
@@ -20,6 +21,7 @@ public class MyStudentUI extends JFrame {
 
     private JTextField stuName = new JTextField();
     private JTextField stuNo = new JTextField();
+    DefaultTableModel tableModel;
 
     private Connection conn;
     private ResultSet r;
@@ -59,7 +61,6 @@ public class MyStudentUI extends JFrame {
         label.setBounds(10, 27, 95, 15);
         panel.add(label);
 
-
         stuName.setColumns(10);
         stuName.setBounds(101, 24, 125, 21);
         panel.add(stuName);
@@ -91,35 +92,13 @@ public class MyStudentUI extends JFrame {
         getContentPane().add(label_2);
 
         String[] colums = {"学号", "姓名", "专业", "性别", "年龄", "联系方式"};
-        Object[][] obj = new Object[list.size()][colums.length];
-        int i = 0;
-        for (Student student : list) {
-            for (int j = 0; j < 6; j++) {
-                switch (j) {
-                    case 0:
-                        obj[i][j] = student.getStuNo();
-                        break;
-                    case 1:
-                        obj[i][j] = student.getStuName();
-                        break;
-                    case 2:
-                        obj[i][j] = student.getStuMajor();
-                        break;
-                    case 3:
-                        obj[i][j] = student.getStuSex();
-                        break;
-                    case 4:
-                        obj[i][j] = student.getStuAge();
-                        break;
-                    case 5:
-                        obj[i][j] = student.getStuPhone();
-                        break;
-                }
-            }
-            i++;
-        }
+        Object[][] objects = setTable(list, colums);
+
+        tableModel = new DefaultTableModel();
+        tableModel.setDataVector(objects, colums);
         //创建一个table实例
-        JTable table = new JTable(obj, colums);
+        JTable table = new JTable(objects, colums);
+        table.setModel(tableModel);
         table.setBounds(25, 130, 760, 400);
         table.setBorder(new LineBorder(new Color(0, 0, 0)));
         //设置JTable的列默认的宽度和高度
@@ -136,42 +115,62 @@ public class MyStudentUI extends JFrame {
         scroll.setBounds(25, 130, 760, 400);
         getContentPane().add(scroll);
 
-
+        //监听查询学生按钮，更新table
         button.addActionListener(e -> {
             String stu = stuName.getText();
-            if (null != stu && !stu.isEmpty()) {
-                list.clear();
-                List<Student> studentList = selectAllStu(stu);
-                if (studentList.size() > 0) {
-                    // TODO: 2019-03-30
-                    //final DefaultTableModel dtm = new DefaultTableModel();
+            list.clear();
+            List<Student> studentList = selectAllStu(stu);
+            if (studentList.size() > 0) {
+                tableModel = new DefaultTableModel();
+                Object[][] obj = setTable(studentList, colums);
+                tableModel.setDataVector(obj, colums);
+                table.setModel(tableModel);
 
-                } else {
-                    JOptionPane.showMessageDialog(null, "查不到该学生信息！");
-                }
+            } else {
+                JOptionPane.showMessageDialog(null, "查不到该学生信息！");
             }
         });
 
         button_3.addActionListener(e -> {
-            if (null != stuName.getText() && !stuName.getText().isEmpty()) {
-                System.err.println(stuNo.getText());
+            String stuNoText = stuNo.getText();
+            if (null != stuNoText && !stuNoText.isEmpty()) {
+                list.clear();
+                if (deleteStu(stuNoText)) {
+                    JOptionPane.showMessageDialog(null, "删除成功！");
+                    List<Student> studentList = selectAllStu(null);
+                    tableModel = new DefaultTableModel();
+                    Object[][] obj = setTable(studentList, colums);
+                    tableModel.setDataVector(obj, colums);
+                    table.setModel(tableModel);
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "删除失败,没有此人或已删除！");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "请输入要删除的学号！");
             }
         });
 
     }
 
 
+    /**
+     * 根据姓名或学号查询学生，传入空查询所有
+     *
+     * @param student
+     * @return
+     */
     public List<Student> selectAllStu(String student) {
         try {
             conn = OperationSQL.getCon();  //建立数据库连接
             String sql2 = "select stu.stu_no,stu.name,mj.major,stu.sex,stu.age,stu.phone " +
                     "from t_student stu join t_major mj on stu.major=mj.id where stu.is_deleted=0 and stu.major=?";
-            if (null != student) {
+            if (null != student && !student.isEmpty()) {
                 sql2 = sql2 + " and (stu.name=? or stu_no=?)";
             }
             PreparedStatement stmt = conn.prepareStatement(sql2);   //会抛出异常
             stmt.setString(1, classNo);
-            if (null != student) {
+            if (null != student && !student.isEmpty()) {
                 stmt.setString(2, student);
                 stmt.setString(3, student);
             }
@@ -200,6 +199,11 @@ public class MyStudentUI extends JFrame {
         return Collections.EMPTY_LIST;
     }
 
+    /**
+     * 查询该登录账号教师所带班级
+     *
+     * @return
+     */
     private String selectClass() {
         try {
             conn = OperationSQL.getCon();  //建立数据库连接
@@ -220,4 +224,67 @@ public class MyStudentUI extends JFrame {
         return null;
     }
 
+    /**
+     * 根据学号删除学生
+     *
+     * @param stuNo
+     * @return
+     */
+    private boolean deleteStu(String stuNo) {
+        try {
+            conn = OperationSQL.getCon();  //建立数据库连接
+            String sql = "update t_student set is_deleted=1 where stu_no=?";
+            PreparedStatement stmt = conn.prepareStatement(sql);   //会抛出异常
+            stmt.setString(1, stuNo);
+            System.err.println("执行SQL->:" + sql);
+            int update = stmt.executeUpdate();
+            if (update > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            OperationSQL.closeConnet();
+        }
+        return false;
+    }
+
+
+    /**
+     * 提取重复代码，设置table的值
+     *
+     * @param list   学生集合
+     * @param colums 字符数组，表头
+     * @return
+     */
+    private Object[][] setTable(List<Student> list, String[] colums) {
+        Object[][] objects = new Object[list.size()][colums.length];
+        int k = 0;
+        for (Student student : list) {
+            for (int j = 0; j < 6; j++) {
+                switch (j) {
+                    case 0:
+                        objects[k][j] = student.getStuNo();
+                        break;
+                    case 1:
+                        objects[k][j] = student.getStuName();
+                        break;
+                    case 2:
+                        objects[k][j] = student.getStuMajor();
+                        break;
+                    case 3:
+                        objects[k][j] = student.getStuSex();
+                        break;
+                    case 4:
+                        objects[k][j] = student.getStuAge();
+                        break;
+                    case 5:
+                        objects[k][j] = student.getStuPhone();
+                        break;
+                }
+            }
+            k++;
+        }
+        return objects;
+    }
 }
