@@ -130,7 +130,6 @@ public class TeacherUI extends JFrame {
 
         //监听修改按钮
         button.addActionListener(e -> {
-            // TODO Auto-generated method stub
             if (updateUserInfo()) {
                 JOptionPane.showMessageDialog(null, "信息修改成功！");
             } else {

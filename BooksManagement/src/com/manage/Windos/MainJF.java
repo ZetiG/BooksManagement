@@ -1,5 +1,6 @@
 package com.manage.Windos;
 
+import com.manage.teacher.MyStudentUI;
 import com.manage.teacher.TeacherUI;
 import com.manage.teacher.SearchStuUI;
 
@@ -44,7 +45,7 @@ public class MainJF extends JFrame {
         gbc_lblNewLabel_1.gridy = 0;
         panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
-        JButton btnNewButton = new JButton("个人信息");
+        JButton btnNewButton = new JButton("我的信息");
         GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
         gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
         gbc_btnNewButton.gridx = 0;
@@ -81,7 +82,7 @@ public class MainJF extends JFrame {
         panel_1.setLayout(gbl_panel_1);
 
         //右边栏菜单
-        JLabel lblNewLabel_2 = new JLabel("图书管理");
+        JLabel lblNewLabel_2 = new JLabel("学生管理");
         lblNewLabel_2.setFont(new Font("楷体", Font.BOLD, 15));
         lblNewLabel_2.setIcon(new ImageIcon(MainJF.class.getResource("/images/bookManager.png")));
         GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
@@ -140,7 +141,7 @@ public class MainJF extends JFrame {
         btnNewButton_2.addActionListener(e -> new Book_delete());
         btnNewButton_3.addActionListener(e -> new Book_borrow());
         btnNewButton_4.addActionListener(e -> new Book_return());
-        btnNewButton_5.addActionListener(e -> new Book_require());
+        btnNewButton_5.addActionListener(e -> new MyStudentUI());
         btnNewButton_6.addActionListener(e -> new IDcard_new());
         btnNewButton_7.addActionListener(e -> new Sort_new());
         btnNewButton_8.addActionListener(e -> new Author_new());
