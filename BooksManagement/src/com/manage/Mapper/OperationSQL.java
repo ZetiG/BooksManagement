@@ -2,6 +2,9 @@ package com.manage.Mapper;
 
 import javax.swing.*;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class OperationSQL {
     private static Connection conn = null;
@@ -25,7 +28,7 @@ public class OperationSQL {
     public static int queryUser(String account, String pwd, String role) {
         try {
             //创建SQL语句
-            String sql = "select id,account,pwd,role from t_user where account=? and role=? and flag='0'";
+            String sql = "select id,account,pwd,role from t_user where account=? and role=? and is_deleted='0'";
             preStm = conn.prepareStatement(sql);
             // 给?赋值(可防止SQL注入问题)，不要直接使用拼接的方式
             preStm.setString(1, account);
@@ -69,29 +72,81 @@ public class OperationSQL {
         }
     }
 
+    /**
+     * 查询所有专业
+     *
+     * @return
+     */
+    public static List getAllClass() {
+        try {
+            conn = getCon();
+            String sql = "select id,major from t_major where is_deleted=0";
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            result = pstm.executeQuery();
+            List list = new ArrayList();
+            while (result.next()) {
+                list.add(result.getString(2));
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            OperationSQL.closeConnet();
+        }
+        return Collections.EMPTY_LIST;
+    }
 
     /**
-     * 提取公共方法
+     * 根据传入的专业返回对应的ID
      *
-     * @param t1
-     * @param t2
-     * @param t3
-     * @param t4
-     * @param t5
-     * @param t6
-     * @param t7
-     * @param t8
-     * @throws SQLException
+     * @param className
+     * @return
      */
-    public static void setParams(JTextField t1, JTextField t2, JTextField t3, JTextField t4,
-                                 JTextField t5, JTextField t6, JTextArea t7, JTextField t8) throws SQLException {
-        t1.setText(result.getString(1));
-        t2.setText(result.getString(2));
-        t3.setText(result.getString(3));
-        t4.setText(result.getString(4));
-        t5.setText(result.getString(5));
-        t6.setText(result.getString(6));
-        t7.setText(result.getString(7));
-        t8.setText(result.getString(8));
+    public static int getClassId(String className) {
+        try {
+            conn = getCon();
+            String sql = "select id,major from t_major where is_deleted=0 and major=?";
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            if (!className.isEmpty()) {
+                pstm.setString(1, className);
+                result = pstm.executeQuery();
+                if (result.next()) {
+                    int classId = Integer.parseInt(result.getString(1));
+                    return classId;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            OperationSQL.closeConnet();
+        }
+        return 0;
+    }
+
+    /**
+     * 根据传入的ID返回对应的专业
+     *
+     * @param classID
+     * @return
+     */
+    public static String getClassName(String classID) {
+        try {
+            conn = getCon();
+            String sql = "select id,major from t_major where is_deleted=0 and id=?";
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            if (!classID.isEmpty()) {
+                pstm.setString(1, classID);
+                result = pstm.executeQuery();
+                if (result.next()) {
+                    String className = result.getString(2);
+                    return className;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            OperationSQL.closeConnet();
+        }
+        return null;
     }
 }

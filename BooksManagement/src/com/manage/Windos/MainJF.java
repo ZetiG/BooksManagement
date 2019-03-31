@@ -1,8 +1,9 @@
 package com.manage.Windos;
 
+import com.manage.teacher.AddStudentUI;
 import com.manage.teacher.MyStudentUI;
-import com.manage.teacher.TeacherUI;
 import com.manage.teacher.SearchStuUI;
+import com.manage.teacher.TeacherUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,12 +60,6 @@ public class MainJF extends JFrame {
         gbc_btnNewButton_1.gridy = 3;
         panel.add(btnNewButton_1, gbc_btnNewButton_1);
 
-        JButton btnNewButton_2 = new JButton("图书删除");
-        GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
-        gbc_btnNewButton_2.gridx = 0;
-        gbc_btnNewButton_2.gridy = 4;
-        panel.add(btnNewButton_2, gbc_btnNewButton_2);
-
         //管理界面中心图片
         JLabel lblNewLabel = new JLabel("New label");
         lblNewLabel.setIcon(new ImageIcon(MainJF.class.getResource("/images/main.PNG")));
@@ -91,25 +86,19 @@ public class MainJF extends JFrame {
         gbc_lblNewLabel_2.gridy = 0;
         panel_1.add(lblNewLabel_2, gbc_lblNewLabel_2);
 
-        JButton btnNewButton_3 = new JButton("图书借出");
+        JButton btnNewButton_3 = new JButton("新增学生");
         GridBagConstraints gbc_btnNewButton_3 = new GridBagConstraints();
         gbc_btnNewButton_3.insets = new Insets(0, 0, 5, 0);
         gbc_btnNewButton_3.gridx = 0;
         gbc_btnNewButton_3.gridy = 2;
         panel_1.add(btnNewButton_3, gbc_btnNewButton_3);
 
-        JButton btnNewButton_4 = new JButton("图书归还");
+        JButton btnNewButton_4 = new JButton("我的学生");
         GridBagConstraints gbc_btnNewButton_4 = new GridBagConstraints();
         gbc_btnNewButton_4.insets = new Insets(0, 0, 5, 0);
         gbc_btnNewButton_4.gridx = 0;
         gbc_btnNewButton_4.gridy = 3;
         panel_1.add(btnNewButton_4, gbc_btnNewButton_4);
-
-        JButton btnNewButton_5 = new JButton("我的学生");
-        GridBagConstraints gbc_btnNewButton_5 = new GridBagConstraints();
-        gbc_btnNewButton_5.gridx = 0;
-        gbc_btnNewButton_5.gridy = 4;
-        panel_1.add(btnNewButton_5, gbc_btnNewButton_5);
 
         JPanel panel_2 = new JPanel();
         getContentPane().add(panel_2, BorderLayout.SOUTH);
@@ -138,10 +127,8 @@ public class MainJF extends JFrame {
         //Lambda表达式,点击跳转对应页面
         btnNewButton.addActionListener(e -> new TeacherUI());
         btnNewButton_1.addActionListener(e -> new SearchStuUI());
-        btnNewButton_2.addActionListener(e -> new Book_delete());
-        btnNewButton_3.addActionListener(e -> new Book_borrow());
-        btnNewButton_4.addActionListener(e -> new Book_return());
-        btnNewButton_5.addActionListener(e -> new MyStudentUI());
+        btnNewButton_3.addActionListener(e -> new AddStudentUI());
+        btnNewButton_4.addActionListener(e -> new MyStudentUI());
         btnNewButton_6.addActionListener(e -> new IDcard_new());
         btnNewButton_7.addActionListener(e -> new Sort_new());
         btnNewButton_8.addActionListener(e -> new Author_new());
