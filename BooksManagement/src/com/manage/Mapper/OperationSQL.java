@@ -149,4 +149,29 @@ public class OperationSQL {
         }
         return null;
     }
+
+    /**
+     * 根据当前登录的教师查询对应的班级
+     *
+     * @param userId
+     * @return
+     */
+    public static String getUserClassNo(int userId) {
+        try {
+            conn = getCon();
+            String sql = "select class from t_teacher where is_deleted=0 and user_id=?";
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, userId);
+            result = pstm.executeQuery();
+            if (result.next()) {
+                String classNo = result.getString(1);
+                return classNo;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            OperationSQL.closeConnet();
+        }
+        return null;
+    }
 }
