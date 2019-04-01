@@ -175,7 +175,7 @@ public class AddStudentUI extends JFrame {
 
         JButton button = new JButton("µÇ¼Ç");
         button.setIcon(new ImageIcon(IDcard_new.class.getResource("/images/modify.png")));
-        button.setBounds(171, 348, 84, 23);
+        button.setBounds(180, 355, 84, 23);
         getContentPane().add(button);
 
 
