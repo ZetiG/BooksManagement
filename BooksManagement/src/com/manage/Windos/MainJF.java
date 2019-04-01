@@ -112,15 +112,15 @@ public class MainJF extends JFrame {
         label.setBounds(166, 0, 84, 18);
         panel_2.add(label);
 
-        JButton btnNewButton_6 = new JButton("新借记卡登记");
+        JButton btnNewButton_6 = new JButton("待开发");
         btnNewButton_6.setBounds(10, 24, 115, 23);
         panel_2.add(btnNewButton_6);
 
-        JButton btnNewButton_7 = new JButton("图书类别新增");
+        JButton btnNewButton_7 = new JButton("待开发");
         btnNewButton_7.setBounds(155, 24, 122, 23);
         panel_2.add(btnNewButton_7);
 
-        JButton btnNewButton_8 = new JButton("图书作者新增");
+        JButton btnNewButton_8 = new JButton("待开发");
         btnNewButton_8.setBounds(302, 24, 122, 23);
         panel_2.add(btnNewButton_8);
 
@@ -129,9 +129,9 @@ public class MainJF extends JFrame {
         btnNewButton_1.addActionListener(e -> new SearchStuUI());
         btnNewButton_3.addActionListener(e -> new AddStudentUI());
         btnNewButton_4.addActionListener(e -> new MyStudentUI());
-        btnNewButton_6.addActionListener(e -> new IDcard_new());
+/*        btnNewButton_6.addActionListener(e -> new IDcard_new());
         btnNewButton_7.addActionListener(e -> new Sort_new());
-        btnNewButton_8.addActionListener(e -> new Author_new());
+        btnNewButton_8.addActionListener(e -> new Author_new());*/
 
         setVisible(true);
         setBounds(100, 100, 450, 300);
